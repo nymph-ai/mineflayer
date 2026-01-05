@@ -13,6 +13,7 @@ const clientVersion = process.env.MINEFLAYER_CLIENT_VERSION || undefined
 const chatMessage = process.env.MINEFLAYER_CHAT || ''
 const connectTimeoutMs = Number.parseInt(process.env.MINEFLAYER_CONNECT_TIMEOUT_MS || '20000', 10)
 
+console.log(`[mineflayer-smoke] opts dataVersion=${dataVersion} clientVersion=${clientVersion ?? 'default'} protocolVersion=${protocolVersion ?? 'default'}`)
 const mcData = require('minecraft-data')(dataVersion)
 if (mcData?.version) {
   console.log(`[mineflayer-smoke] mcData ${mcData.version.minecraftVersion} protocol ${mcData.version.version}`)
