@@ -13,6 +13,13 @@ const clientVersion = process.env.MINEFLAYER_CLIENT_VERSION || undefined
 const chatMessage = process.env.MINEFLAYER_CHAT || ''
 const connectTimeoutMs = Number.parseInt(process.env.MINEFLAYER_CONNECT_TIMEOUT_MS || '20000', 10)
 
+const mcData = require('minecraft-data')(dataVersion)
+if (mcData?.version) {
+  console.log(`[mineflayer-smoke] mcData ${mcData.version.minecraftVersion} protocol ${mcData.version.version}`)
+} else {
+  console.log(`[mineflayer-smoke] mcData not found for ${dataVersion}`)
+}
+
 const bot = mineflayer.createBot({
   host,
   port,
