@@ -1,4 +1,4 @@
-const mineflayer = require('mineflayer')
+const mineflayer = require('..')
 
 const host = process.env.MINEFLAYER_HOST || '127.0.0.1'
 const port = Number.parseInt(process.env.MINEFLAYER_PORT || '25565', 10)
