@@ -24,6 +24,8 @@
     "debug": "^4.3.2",
     "minecraft-data": "file:../minecraft-data",
     "minecraft-protocol": "file:../node-minecraft-protocol",
+    "mineflayer-collectblock": "^1.4.0",
+    "mineflayer-pathfinder": "^2.4.5",
     "prismarine-biome": "^1.1.1",
     "prismarine-block": "^1.22.0",
     "prismarine-chat": "^1.7.1",

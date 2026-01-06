@@ -12,8 +12,9 @@ const protocolVersion = process.env.MINEFLAYER_PROTOCOL_VERSION
 const clientVersion = process.env.MINEFLAYER_CLIENT_VERSION || undefined
 const chatMessage = process.env.MINEFLAYER_CHAT || ''
 const connectTimeoutMs = Number.parseInt(process.env.MINEFLAYER_CONNECT_TIMEOUT_MS || '20000', 10)
+const stayConnected = process.env.MINEFLAYER_STAY_CONNECTED === '1'
 
-console.log(`[mineflayer-smoke] opts dataVersion=${dataVersion} clientVersion=${clientVersion ?? 'default'} protocolVersion=${protocolVersion ?? 'default'}`)
+console.log(`[mineflayer-smoke] opts dataVersion=${dataVersion} clientVersion=${clientVersion ?? 'default'} protocolVersion=${protocolVersion ?? 'default'} stayConnected=${stayConnected}`)
 const mcData = require('minecraft-data')(dataVersion)
 if (mcData?.version) {
   console.log(`[mineflayer-smoke] mcData ${mcData.version.minecraftVersion} protocol ${mcData.version.version}`)
@@ -41,7 +42,7 @@ bot.once('spawn', () => {
   clearTimeout(timeout)
   console.log('[mineflayer-smoke] Spawned successfully')
   if (chatMessage) bot.chat(chatMessage)
-  setTimeout(() => bot.end(), 2000)
+  if (!stayConnected) setTimeout(() => bot.end(), 2000)
 })
 
 bot.on('end', () => {
