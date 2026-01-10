@@ -53,7 +53,7 @@ const vlmIntervalMs = Number.parseInt(process.env.VLM_INTERVAL_MS || '2000', 10)
 const vlmTimeoutMs = Number.parseInt(process.env.VLM_HTTP_TIMEOUT_MS || '60000', 10)
 const captureDelayMs = Number.parseInt(process.env.VLM_CAPTURE_DELAY_MS || '8000', 10)
 const waitForChunksTimeoutMs = Number.parseInt(process.env.VLM_WAIT_CHUNKS_TIMEOUT_MS || '10000', 10)
-const moveForwardMs = Number.parseInt(process.env.VLM_MOVE_FORWARD_MS || '1500', 10)
+const moveForwardMs = Number.parseInt(process.env.VLM_MOVE_FORWARD_MS || '0', 10)
 const lookYawDeg = Number.parseFloat(process.env.VLM_LOOK_YAW_DEG || '0')
 const lookPitchDeg = Number.parseFloat(process.env.VLM_LOOK_PITCH_DEG || '35')
 const warmupFrames = Number.parseInt(process.env.VLM_WARMUP_FRAMES || '60', 10)
@@ -408,6 +408,8 @@ bot.once('spawn', () => {
   ;(async () => {
     captureReadyAt = Number.POSITIVE_INFINITY
     remainingWarmup = warmupFrames
+    const game = bot.game || {}
+    logPrefix(`game info: minY=${game.minY} height=${game.height} dimension=${game.dimension} worldName=${game.worldName}`)
     if (!sawPosition && bot.entity?.position) {
       sawPosition = true
       const below = bot.blockAt?.(bot.entity.position.offset(0, -1, 0))
@@ -419,18 +421,27 @@ bot.once('spawn', () => {
     try {
       await bot.waitForChunksToLoad()
       logPrefix('chunks loaded')
+      const currentPos = bot.entity?.position
+      if (currentPos) {
+        const below = bot.blockAt?.(currentPos.offset(0, -1, 0))
+        logPrefix(`post-load block_below=${below?.name || 'unknown'} stateId=${below?.stateId ?? 'n/a'}`)
+      }
     } catch (err) {
       logPrefix(`waitForChunksToLoad failed: ${err.message}`)
     }
-    const yaw = degToRad(lookYawDeg)
-    const pitch = degToRad(lookPitchDeg)
-    tryLook(yaw, pitch)
+    const desiredYaw = degToRad(lookYawDeg)
+    const desiredPitch = degToRad(lookPitchDeg)
+    tryLook(desiredYaw, desiredPitch)
+    const yawOffset = desiredYaw - (bot.entity?.yaw || 0)
+    const pitchOffset = desiredPitch - (bot.entity?.pitch || 0)
     mineflayerViewer(bot, {
       output: `${frameHost}:${framePort}`,
       frames: -1,
       width: frameWidth,
       height: frameHeight,
       viewDistance,
+      yawOffset,
+      pitchOffset,
       jpegOptions: {
         quality: frameQuality,
         progressive: false

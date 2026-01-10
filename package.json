@@ -23,7 +23,7 @@
   "dependencies": {
     "debug": "^4.3.2",
     "jpeg-js": "^0.4.4",
-    "minecraft-data": "npm:@nymph-ai/minecraft-data@latest",
+    "minecraft-data": "npm:@nymph-ai/minecraft-data@3.102.4",
     "minecraft-protocol": "file:../node-minecraft-protocol",
     "mineflayer-collectblock": "^1.4.0",
     "mineflayer-pathfinder": "^2.4.5",
@@ -44,6 +44,9 @@
     "typed-emitter": "^1.0.0",
     "uuid-1345": "^1.0.2",
     "vec3": "^0.1.7"
+  },
+  "overrides": {
+    "minecraft-data": "npm:@nymph-ai/minecraft-data@3.102.4"
   },
   "devDependencies": {
     "@types/node": "^24.0.6",
